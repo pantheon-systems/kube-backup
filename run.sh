@@ -4,7 +4,7 @@
 
 set -eou pipefail
 
-INTERVAL="${INTERVAL:-1h}"
+INTERVAL="${INTERVAL:-4h}"
 
 gcloud auth activate-service-account "--key-file=$GOOGLE_APPLICATION_CREDENTIALS"
 
