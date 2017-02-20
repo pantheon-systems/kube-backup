@@ -126,6 +126,7 @@ gpg_encrypt_to_all() {
     local recipient_list
     recipient_list=$($GPG_BIN --homedir "$GPG_TMP_DIR" --batch --list-keys --with-colons --fast-list-mode \
         | awk -F: '/^pub/{printf "--recipient %s ", $5}')
+    # shellcheck disable=SC2086
     $GPG_BIN --homedir "$GPG_TMP_DIR" $recipient_list --trust-model always --batch --encrypt
 }
 
