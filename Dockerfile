@@ -25,6 +25,6 @@ RUN echo "deb https://packages.cloud.google.com/apt cloud-sdk-${LSB_RELEASE} mai
     && rm -rf /tmp/*
 
 ADD backup.sh /app/backup.sh
-ADD run.sh    /app/run.sh
+ADD docker-run.sh    /app/docker-run.sh
 
-CMD ["/app/run.sh"]
+CMD ["/app/docker-run.sh"]
