@@ -26,7 +26,7 @@ Configuration is handled through environment variables:
 
 - `KEYBASE_USERS`: A space-separated list of keybase.io users whose GPG
   keys will be used to encrypt the backup.
-- `INTERVAL`: Used by the run.sh wrapper when running as a Kubernetes pod. This
+- `INTERVAL`: Used by the docker-run.sh wrapper when running as a Kubernetes pod. This
   setting defines how often the backup.sh script is executed. Default is 4h.
 - `GCS_BUCKET_PATH`: Google Cloud Storage path to store backups under, eg:
   `gs://pantheon-internal-kube-backups/cluster-01/`
@@ -61,7 +61,10 @@ access to the default token.
 Deployment
 ----------
 
-TODO
+See the `deployment-example.yaml` file for an example Deployment.
+
+Deployment to Pantheon's clusters is handled by the [gce-infrastructure](https://github.com/pantheon-systems/gce-infrastructure)
+repo.
 
 Limitations
 -----------
@@ -96,7 +99,7 @@ make build-docker push
 kubectl run joe-test --image=quay.io/getpantheon/kube-backup:dev --restart=Never --image-pull-policy=Always -it --command -- /bin/bash
 
 root@kube-backup-test# ./backup.sh
-# or exec ./run.sh if you want to test the wrapper
+# or exec ./docker-run.sh if you want to test the wrapper
 
 # cleanup the pod when done:
 kubectl delete pod kube-backup-test
