@@ -118,10 +118,19 @@ backup_namespaces() {
     done<<< "$spaces"
 }
 
+#######################################
 # a wrapper around 'gpg --encrypt' that will encrypt data from STDIN against all pubkeys
 # in the keychain in $GPG_TMP_DIR. Encrypted data will be sent to STDOUT
 # example:
 #   cat filename | gpg_encrypt_to_all >filename.gpg
+# Globals:
+#   GPG_BIN
+#   GPG_TMP_DIR
+# Arguments:
+#   None
+# Returns:
+#   None
+#######################################
 gpg_encrypt_to_all() {
     local recipient_list
     recipient_list=$($GPG_BIN --homedir "$GPG_TMP_DIR" --batch --list-keys --with-colons --fast-list-mode \
