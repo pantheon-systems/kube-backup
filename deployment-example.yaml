@@ -1,0 +1,57 @@
+# vim: set ft=yaml:
+# -*- mode: yaml -*-
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kube-backup
+  namespace: kube-system
+  labels:
+    app: kube-backup
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kube-backup
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+
+  template:
+    metadata:
+      labels:
+        app: kube-backup
+
+    spec:
+      containers:
+        - image: quay.io/getpantheon/kube-backup:dev
+          name: kube-backup
+          imagePullPolicy: Always
+          env:
+            # a list of keybase.io users whose GPG keys will be used to encrypt the backups
+            - name: KEYBASE_USERS
+              value: "joemiller spheromak davidstrauss benz"
+
+            # GCS_BUCKET_PATH is likely different for each cluster. Set the path in a configmap named 'kube-backup-config'
+            # The service-account will need the 'Storage Object Creator' role on the project where the bucket resides.
+            - name: GCS_BUCKET_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: kube-backup-config
+                  key: GCS_BUCKET_PATH
+
+            # If you need to explicitly set a service-account to use, mount a secretVol and set this env var
+            #- name: GOOGLE_APPLICATION_CREDENTIALS
+            #  value: /path/to/service-account.json
+
+          resources:
+            limits:
+              cpu: 2.0
+              memory: 256Mi
+            requests:
+              cpu: 0.1
+              memory: 64Mi
