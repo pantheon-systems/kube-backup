@@ -1,0 +1,24 @@
+---
+machine:
+  environment:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - make deps-circle
+
+test:
+  override:
+    - make test-circle
+    - make build-docker
+
+deployment:
+  production:
+    branch:
+      - master
+      - release-test
+    commands:
+      - echo TODO: do we need quay login
+      # - echo make build-docker
+      - echo make push
