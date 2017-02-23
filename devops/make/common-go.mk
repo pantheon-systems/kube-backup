@@ -14,6 +14,7 @@ deps:: deps-go
 deps-circle:: deps-circle-go deps
 lint:: lint-go
 test:: test-go
+test-circle:: test test-coveralls
 test-coverage:: test-coverage-go
 build:: build-go
 
@@ -49,7 +50,6 @@ test:: test-go
 test-no-race:: lint ## run tests without race detector
 	go test -v $$(go list ./... | grep -v /vendor/)
 
-test-circle:: test test-coveralls ## invoke test tasks for CI
 
 deps-circle-go:: ## install Go build and test dependencies on Circle-CI
 	bash devops/make/sh/install-go.sh

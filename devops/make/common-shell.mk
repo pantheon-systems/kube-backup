@@ -2,6 +2,7 @@
 
 ## Append tasks to the global tasks
 test:: test-shell
+test-circle:: test-shell
 deps-circle:: deps-circle-shell
 
 # version of shellcheck to install from deps-circle
