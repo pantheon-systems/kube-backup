@@ -11,6 +11,7 @@ deps:: ## install build and test dependencies
 deps-circle:: ## install build and test dependencies on circle-ci
 lint:: ## run all linters
 test:: ## run all tests
+test-circle:: ## invoke test tasks for CI
 test-coverage:: ## run test coverage reports
 build:: ## run all build
 
