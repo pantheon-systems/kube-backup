@@ -22,6 +22,4 @@ deployment:
       - master
       - release-test
     commands:
-      - echo TODO do we need quay login
-      # - echo make build-docker
-      - echo make push
+      - make push
