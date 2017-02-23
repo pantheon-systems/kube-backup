@@ -29,8 +29,22 @@ Common make tasks
   * [common-pants.mk](#common-pantsmk)
   * [install-circle-fetch](#install-circle-fetch)
   * [install-circle-pants](#install-circle-pants)
-  * [common-go.mk](#common-gomk)
+  * [common-python.mk](#common-pythonmk)
     + [Input Environment Variables:](#input-environment-variables-2)
+    + [build-python::](#build-python)
+    + [test-python::](#test-python)
+    + [test-circle-python::](#test-circle-python)
+    + [deps-python::](#deps-python)
+    + [deps-circle::](#deps-circle)
+    + [deps-coverage::](#deps-coverage)
+    + [test-coverage-python::](#test-coverage-python)
+    + [test-coveralls::](#test-coveralls)
+    + [coverage-report::](#coverage-report)
+    + [lint-python::](#lint-python)
+    + [lint-pylint::](#lint-pylint)
+    + [lint-flake8::](#lint-flake8)
+  * [common-go.mk](#common-gomk)
+    + [Input Environment Variables:](#input-environment-variables-3)
     + [build-go::](#build-go)
     + [build-linux::](#build-linux)
     + [build-circle::](#build-circle)
@@ -38,14 +52,14 @@ Common make tasks
     + [test-no-race::](#test-no-race)
     + [test-circle::](#test-circle)
     + [deps-go::](#deps-go)
-    + [deps-circle::](#deps-circle)
-    + [deps-coverage::](#deps-coverage)
+    + [deps-circle::](#deps-circle-1)
+    + [deps-coverage::](#deps-coverage-1)
     + [deps-status::](#deps-status)
     + [test-coverage-go::](#test-coverage-go)
-    + [test-coveralls::](#test-coveralls)
+    + [test-coveralls::](#test-coveralls-1)
     + [test-coverage-html::](#test-coverage-html)
   * [common-kube.mk](#common-kubemk)
-    + [Input Environment Variables:](#input-environment-variables-3)
+    + [Input Environment Variables:](#input-environment-variables-4)
     + [Exported Environment Variables:](#exported-environment-variables-1)
     + [force-pod-restart::](#force-pod-restart)
     + [update-secrets::](#update-secrets)
@@ -297,6 +311,92 @@ Installs the `pants` utility on Circle-CI from https://github.com/pantheon-syste
 
 This task is added to the global `deps-circle` task. If `make deps-circle` is already in your
 circle.yml file then you only need to `include common-pants.mk` in your Makefile.
+
+common-python.mk
+------------
+
+### Input Environment Variables:
+
+- `PYTHON_PACKAGE_NAME`: (required) The name of the python package.
+- `TEST_RUNNER`: (optional) The name of the python test runner to execute. Defaults to `trial`
+- `COVERALLS_TOKEN`: (required by circle) Token to use when pushing coverage to coveralls.
+
+### build-python::
+
+Run `python setup.py sdist` in the current project directory.
+
+This task is added to the global `build` task.
+
+### test-python::
+
+Runs targets `test-coverage-python` and target the global `lint` target. 
+
+This task is added to the global `test` task.
+
+### test-circle-python::
+
+Intended for use in circle.yml to run tests under the Circle-CI context. This
+target additionally calls target test-coveralls-python which runs `coveralls`
+to report coverage metrics.
+
+### deps-python::
+
+Install this projects' Python dependencies which includes the targets deps-testrunner-python,
+deps-lint-python and deps-coverage-python
+
+NOTE: Currently assumes this project is using `pip` for dependency management.
+
+This task is added to the global `deps` task.
+
+### deps-circle::
+
+Install dependencies on Circle-CI which includes the targets deps-coveralls-python
+
+### deps-coverage::
+
+Install dependencies necessary for running the test coverage utilities like
+coveralls.
+
+### test-coverage-python::
+
+Run `coverage run --branch --source $(PYTHON_PACKAGE_NAME) $(shell which $(TEST_RUNNER)) $(PYTHON_PACKAGE_NAME)`
+which creates the coverage report.
+
+This task is added to the global `test-coverage` task.
+
+### test-coveralls::
+
+Run `coveralls` which sends the coverage report to coveralls.
+
+Requires `COVERALLS_TOKEN` environment variable.
+
+### coverage-report::
+
+Run `coverage report` on the last generated coverage source.
+
+### lint-python::
+Run targets `lint-pylint` and `lint-flake8`
+
+This task is added to the global `lint` task.
+
+### lint-pylint::
+Run `pylint $(PYTHON_PACKAGE_NAME)`
+
+Pylint is a Python source code analyzer which looks for programming errors, helps enforcing a coding standard and sniffs for some code smells
+as defined in Martin Fowler's Refactoring book). Pylint can also be run against any installed python package which is useful for catching
+misconfigured setup.py files.
+
+This task is added to `lint-python` task.
+
+### lint-flake8::
+Run `flake8 --show-source --statistics --benchmark $(PYTHON_PACKAGE_NAME)`
+
+Flake8 is a combination of three tools (Pyflakes, pep8 and mccabe). Flake8 performs static analysis of your uncompiled code (NOT installed packages).
+
+When the source directory of your project is not found this target prints a warning instead of an error. Pylint does not require the source directory
+and can be run on an installed python package. This preserves flexibility.
+
+This task is added to `lint-python` task.
 
 common-go.mk
 ------------

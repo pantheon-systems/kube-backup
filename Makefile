@@ -6,6 +6,11 @@ include common-kube.mk
 include common-shell.mk
 include common-pants.mk
 
+# Required Input Variables for common-python and a default value
+PYTHON_PACKAGE_NAME=dummy
+TEST_RUNNER=trial
+include common-python.mk
+
 NAMESPACE=sandbox-common-make-test
 APP=common-make
 
