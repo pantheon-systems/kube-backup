@@ -5,7 +5,7 @@ set -eo pipefail
 
 INTERVAL="${INTERVAL:-4h}"
 
-# NOTE this only works with the JSON file download, not p12
+# NOTE this only works with JSON files, not p12
 if [[ -n "$GOOGLE_APPLICATION_CREDENTIALS" ]]; then
     gcloud auth activate-service-account "--key-file=$GOOGLE_APPLICATION_CREDENTIALS"
 fi
