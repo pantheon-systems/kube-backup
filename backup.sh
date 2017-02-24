@@ -24,7 +24,7 @@ set -euo pipefail
 KEYBASE_USERS="${KEYBASE_USERS:-joemiller spheromak}"
 
 # GCS bucket to store backups
-GCS_BUCKET_PATH="${GCS_BUCKET:-gs://pantheon-internal-kube-backups/}"
+GCS_BUCKET_PATH="${GCS_BUCKET_PATH:-gs://pantheon-internal-kube-backups/}"
 
 # max number of kubectl-get processes to run at once
 THREADS=${THREADS:-12}
