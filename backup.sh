@@ -147,6 +147,7 @@ create_tarball() {
 }
 
 upload_tarball() {
+    echo "Uploading $TARBALL to ${GCS_BUCKET_PATH}$(basename "$TARBALL")"
     gsutil cp "$TARBALL" "$GCS_BUCKET_PATH"
 }
 
