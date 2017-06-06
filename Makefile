@@ -16,6 +16,7 @@ prune-common-make:
 		-not -name common-shell.mk \
 		-not -name common-docs.mk \
 		-not -name common-docker.mk \
+		-not -name devops/make/sh/install-shellcheck.sh \
 		-delete
 	@find devops/make -empty -delete
 	@git add devops/make
