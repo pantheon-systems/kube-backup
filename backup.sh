@@ -59,6 +59,7 @@ cluster_objects=(
     persistentvolumes\
     storageclasses\
     thirdpartyresources\
+    customresourcedefinitions\
     )
 
 # setup a global "spaces" variable that lists every namesapce
@@ -85,9 +86,13 @@ init_cleanup_handler() {
 }
 
 backup_cluster_objects() {
+    echo "Backing up cluster-wide resources"
     for i in "${cluster_objects[@]}" ; do
+        echo "   $i"
         mkdir -p "${TMPDIR}/${backup_dir}"
-        kubectl get "$i" -oyaml > "${TMPDIR}/${backup_dir}/${i}.yaml" 2> /dev/null
+        if ! kubectl get "$i" -oyaml > "${TMPDIR}/${backup_dir}/${i}.yaml"; then
+            echo "WARNING: failed to backup cluster-wide resource type '$i', continuing with backup of remaining resources"
+        fi
     done
 }
 
