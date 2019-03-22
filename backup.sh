@@ -90,7 +90,7 @@ backup_cluster_objects() {
     for i in "${cluster_objects[@]}" ; do
         echo "   $i"
         mkdir -p "${TMPDIR}/${backup_dir}"
-        if ! kubectl get "$i" -oyaml > "${TMPDIR}/${backup_dir}/${i}.yaml"; then
+        if ! kubectl get "$i" --export -oyaml > "${TMPDIR}/${backup_dir}/${i}.yaml"; then
             echo "WARNING: failed to backup cluster-wide resource type '$i', continuing with backup of remaining resources"
         fi
     done
@@ -111,7 +111,7 @@ backup_namespaces() {
                 local resource_dir="${ns_dir}/${resource_type}"
                 mkdir -p "$resource_dir"
 
-                kubectl get "$resource_type" "$obj" --namespace="$ns" -oyaml >"${resource_dir}/${obj}.yaml" 2>/dev/null &
+                kubectl get "$resource_type" "$obj" --namespace="$ns" --export -oyaml >"${resource_dir}/${obj}.yaml" 2>/dev/null &
                 nproc=$((nproc + 1))
                 if [[ "$nproc" -ge "$THREADS" ]]; then
                     # echo "max $nproc threads running. Pausing to wait for completion."
