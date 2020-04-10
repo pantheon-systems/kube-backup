@@ -1,3 +1,6 @@
+> :warning: This repo is retired. There will be no updates. We recommend using https://velero.io/ instead
+> which has far more features and a community to maintain it.
+
 kube-backup
 ===========
 
